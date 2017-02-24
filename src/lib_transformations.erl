@@ -20,13 +20,16 @@
 %%% API
 %%%===================================================================
 
--spec to_world_space(Vector :: #vector2d{}, AgentHead :: #vector2d{}) ->
+-spec to_world_space(Vector :: #vector2d{},
+                     AgentHead :: #vector2d{} | float()) ->
                             #vector2d{}.
 to_world_space(#vector2d{} = Vector, #vector2d{} = AgentHead) ->
     Mat = lib_c2d_matrix:rotate(?MATRIX_IDENTITY, AgentHead),
-    transform_vector2d(Mat, Vector).
+    transform_vector2d(Mat, Vector);
+to_world_space(#vector2d{} = Vector, Angle) ->
+    to_world_space(Vector, lib_vector2d:vector2d(Angle)).
 
--spec to_world_space(Local :: #vector2d{}, AgentHead :: #vector2d{},
+-spec to_world_space(Local :: #vector2d{}, AgentHead :: #vector2d{} | float(),
                      AgentPoint :: #vector2d{}) ->
                             #vector2d{}.
 to_world_space(#vector2d{} = Local, #vector2d{} = AgentHead,
@@ -34,7 +37,9 @@ to_world_space(#vector2d{} = Local, #vector2d{} = AgentHead,
     Mat = lib_c2d_matrix:rotate(?MATRIX_IDENTITY, AgentHead),
     Mat2 = lib_c2d_matrix:translate(
              Mat, AgentPoint#vector2d.x, AgentPoint#vector2d.y),
-    transform_vector2d(Mat2, Local).
+    transform_vector2d(Mat2, Local);
+to_world_space(#vector2d{} = Local, Angle, #vector2d{} = AgentPoint) ->
+    to_world_space(Local, lib_vector2d:vector2d(Angle), AgentPoint).
 
 -spec transform_vector2d(#c2d_matrix{}, #vector2d{} | list()) ->
                                 #vector2d{} | list().

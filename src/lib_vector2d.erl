@@ -1,8 +1,10 @@
 -module(lib_vector2d).
 
 %% API exports
--export([is_zero/1,
-         is_equal/2,
+-export([
+         vector2d/1,
+         is_zero/1,
+         equal/2,
          plus/2,
          perp/1,
          normalize/1,
@@ -18,14 +20,23 @@
 %% API functions
 %%====================================================================
 
+-spec vector2d(float()) ->
+                      #vector2d{}.
+vector2d(Angle) ->
+    Ra = math:pi() * Angle / 180,
+    #vector2d{
+       x = math:cos(Ra),
+       y = math:sin(Ra)
+      }.
+
 -spec is_zero(#vector2d{}) ->
                      true | false.
 is_zero(#vector2d{x = X, y = Y}) ->
     X * X + Y * Y < ?MIN_POS_FLOAT.
 
--spec is_equal(#vector2d{}, #vector2d{}) ->
+-spec equal(#vector2d{}, #vector2d{}) ->
                       true | false.
-is_equal(#vector2d{x = X1, y = Y1}, #vector2d{x = X2, y = Y2}) ->
+equal(#vector2d{x = X1, y = Y1}, #vector2d{x = X2, y = Y2}) ->
     Dx = X1 - X2,
     Dy = Y1 - Y2,
     Dx * Dx + Dy * Dy < ?MIN_POS_FLOAT.

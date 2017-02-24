@@ -37,19 +37,7 @@ rotate(#c2d_matrix{} = Matrix, #vector2d{} = Heading) ->
                         i33 = 1
                        });
 rotate(#c2d_matrix{} = Matrix, Angle) ->
-    Cos = math:cos(Angle),
-    Sin = math:sin(Angle),
-    multiply(Matrix, #c2d_matrix{
-                        i11 = Cos,
-                        i12 = Sin,
-                        i13 = 0,
-                        i21 = -Sin,
-                        i22 = Cos,
-                        i23 = 0,
-                        i31 = 0,
-                        i32 = 0,
-                        i33 = 1
-                       }).
+    rotate(Matrix, lib_vector2d:vector2d(Angle)).
 
 -spec translate(#c2d_matrix{}, float(), float()) ->
                        #c2d_matrix{}.

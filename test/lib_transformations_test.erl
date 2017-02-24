@@ -36,13 +36,19 @@ to_world_space_test_() ->
      inner_vector_transform_test(lib_vector2d:plus(?VECTOR_60, ?VECTOR_45),
                                  ?VECTOR_30, ?VECTOR_30, ?VECTOR_45),
      inner_vector_transform_test(lib_vector2d:plus(?VECTOR_NEG30, ?VECTOR_30),
-                                 ?VECTOR_NEG60, ?VECTOR_30, ?VECTOR_30)
+                                 ?VECTOR_NEG60, ?VECTOR_30, ?VECTOR_30),
+     %% test angle
+     inner_vector_transform_test(?VECTOR_45, ?VECTOR_45, 0),
+     inner_vector_transform_test(?VECTOR_30, ?VECTOR_0, 30),
+     inner_vector_transform_test(?VECTOR_60, ?VECTOR_30, 30),
+     inner_vector_transform_test(?VECTOR_30, ?VECTOR_60, -30),
+     inner_vector_transform_test(?VECTOR_NEG30, ?VECTOR_30, -60)
     ].
 
 inner_vector_transform_test(VTo, VLocal, VHead) ->
     VWorld = lib_transformations:to_world_space(VLocal, VHead),
-    ?_assert(lib_vector2d:is_equal(VTo, VWorld)).
+    ?_assert(lib_vector2d:equal(VTo, VWorld)).
 
 inner_vector_transform_test(VTo, VLocal, VHead, VPoint) ->
     VWorld = lib_transformations:to_world_space(VLocal, VHead, VPoint),
-    ?_assert(lib_vector2d:is_equal(VTo, VWorld)).
+    ?_assert(lib_vector2d:equal(VTo, VWorld)).
