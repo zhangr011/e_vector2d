@@ -1,4 +1,4 @@
--module(e_vector2d).
+-module(lib_vector2d).
 
 %% API exports
 -export([is_zero/1,
@@ -32,7 +32,7 @@ perp(#vector2d{x = X, y = Y}) ->
 -spec normalize(#vector2d{}) ->
                        #vector2d{}.
 normalize(#vector2d{x = X, y = Y} = Vec) ->
-    Length = e_vector2d:length(Vec),
+    Length = lib_vector2d:length(Vec),
     if
         Length > ?MIN_POS_FLOAT ->
             #vector2d{
