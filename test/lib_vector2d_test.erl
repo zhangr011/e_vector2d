@@ -27,6 +27,17 @@ zero_test_() ->
      ?_assert(lib_vector2d:is_zero(V3))
     ].
 
+plus_test_() ->
+    V0 = #vector2d{},
+    [?_assertEqual(lib_vector2d:multiply(?VECTOR_45, 10),
+                   lib_vector2d:plus(V0, ?VECTOR_45, 10)),
+     ?_assertEqual(#vector2d{
+                      x = 0.8660254037844386 + 5 * 0.5,
+                      y = 0.5 + 5 * 0.8660254037844386
+                     },
+                   lib_vector2d:plus(?VECTOR_30, ?VECTOR_60, 5))
+    ].
+
 normalize_test_() ->
     V1 = #vector2d{x = 1, y = 1},
     V2 = #vector2d{x = 3, y = 4},
