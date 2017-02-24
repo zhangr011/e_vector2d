@@ -18,11 +18,31 @@
 %%--------------------------------------------------------------------
 %% -define(setup(F), {setup, fun start/0, fun stop/1, F}).
 
-zero_test_() ->
-    V1 = #vector2d{x = 0, y = 0},
-    V2 = #vector2d{x = 1, y = 1},
-    V3 = #vector2d{x = 0.0000001, y = 0.0000001},
-    [?_assert(lib_vector2d:is_zero(V1)),
-     ?_assertNot(lib_vector2d:is_zero(V2)),
-     ?_assert(lib_vector2d:is_zero(V3))
+to_world_space_test_() ->
+    [%% test vector transform
+     inner_vector_transform_test(?VECTOR_45, ?VECTOR_45, ?VECTOR_0),
+     inner_vector_transform_test(?VECTOR_90, ?VECTOR_45, ?VECTOR_45),
+     inner_vector_transform_test(?VECTOR_0, ?VECTOR_NEG45, ?VECTOR_45),
+     inner_vector_transform_test(?VECTOR_0, ?VECTOR_45, ?VECTOR_NEG45),
+     inner_vector_transform_test(?VECTOR_NEG90, ?VECTOR_NEG45, ?VECTOR_NEG45),
+     inner_vector_transform_test(?VECTOR_60, ?VECTOR_30, ?VECTOR_30),
+     inner_vector_transform_test(?VECTOR_0, ?VECTOR_NEG30, ?VECTOR_30),
+     inner_vector_transform_test(?VECTOR_90, ?VECTOR_60, ?VECTOR_30),
+     inner_vector_transform_test(?VECTOR_NEG30, ?VECTOR_NEG60, ?VECTOR_30),
+
+     %% test point transform
+     inner_vector_transform_test(lib_vector2d:plus(?VECTOR_45, ?VECTOR_0),
+                                 ?VECTOR_45, ?VECTOR_0, ?VECTOR_0),
+     inner_vector_transform_test(lib_vector2d:plus(?VECTOR_60, ?VECTOR_45),
+                                 ?VECTOR_30, ?VECTOR_30, ?VECTOR_45),
+     inner_vector_transform_test(lib_vector2d:plus(?VECTOR_NEG30, ?VECTOR_30),
+                                 ?VECTOR_NEG60, ?VECTOR_30, ?VECTOR_30)
     ].
+
+inner_vector_transform_test(VTo, VLocal, VHead) ->
+    VWorld = lib_transformations:to_world_space(VLocal, VHead),
+    ?_assert(lib_vector2d:is_equal(VTo, VWorld)).
+
+inner_vector_transform_test(VTo, VLocal, VHead, VPoint) ->
+    VWorld = lib_transformations:to_world_space(VLocal, VHead, VPoint),
+    ?_assert(lib_vector2d:is_equal(VTo, VWorld)).

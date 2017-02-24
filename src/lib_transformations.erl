@@ -9,8 +9,8 @@
 -module(lib_transformations).
 
 %% API
--export([to_world_space/3,
-         to_world_space/4,
+-export([to_world_space/2,
+         to_world_space/3,
          transform_vector2d/2]).
 
 -include("define_vector2d.hrl").
@@ -20,23 +20,18 @@
 %%% API
 %%%===================================================================
 
--spec to_world_space(Vector :: #vector2d{},
-                     AgentHead :: #vector2d{},
-                     AgentSide :: #vector2d{}) ->
+-spec to_world_space(Vector :: #vector2d{}, AgentHead :: #vector2d{}) ->
                             #vector2d{}.
-to_world_space(#vector2d{} = Vector,
-               #vector2d{} = AgentHead, #vector2d{} = AgentSide) ->
-    Mat = lib_c2d_matrix:rotate(?MATRIX_IDENTITY, AgentHead, AgentSide),
+to_world_space(#vector2d{} = Vector, #vector2d{} = AgentHead) ->
+    Mat = lib_c2d_matrix:rotate(?MATRIX_IDENTITY, AgentHead),
     transform_vector2d(Mat, Vector).
 
--spec to_world_space(Local :: #vector2d{},
-                     AgentHead :: #vector2d{}, AgentSide :: #vector2d{},
+-spec to_world_space(Local :: #vector2d{}, AgentHead :: #vector2d{},
                      AgentPoint :: #vector2d{}) ->
                             #vector2d{}.
-to_world_space(#vector2d{} = Local,
-               #vector2d{} = AgentHead, #vector2d{} = AgentSide,
+to_world_space(#vector2d{} = Local, #vector2d{} = AgentHead,
                #vector2d{} = AgentPoint) ->
-    Mat = lib_c2d_matrix:rotate(?MATRIX_IDENTITY, AgentHead, AgentSide),
+    Mat = lib_c2d_matrix:rotate(?MATRIX_IDENTITY, AgentHead),
     Mat2 = lib_c2d_matrix:translate(
              Mat, AgentPoint#vector2d.x, AgentPoint#vector2d.y),
     transform_vector2d(Mat2, Local).

@@ -11,7 +11,6 @@
 %% API
 -export([
          rotate/2,
-         rotate/3,
          translate/3,
          multiply/2
         ]).
@@ -23,8 +22,20 @@
 %%% API
 %%%===================================================================
 
--spec rotate(#c2d_matrix{}, float()) ->
+-spec rotate(#c2d_matrix{}, Head :: #vector2d{} | float()) ->
                     #c2d_matrix{}.
+rotate(#c2d_matrix{} = Matrix, #vector2d{} = Heading) ->
+    multiply(Matrix, #c2d_matrix{
+                        i11 = Heading#vector2d.x,
+                        i12 = Heading#vector2d.y,
+                        i13 = 0,
+                        i21 = -Heading#vector2d.y,
+                        i22 = Heading#vector2d.x,
+                        i23 = 0,
+                        i31 = 0,
+                        i32 = 0,
+                        i33 = 1
+                       });
 rotate(#c2d_matrix{} = Matrix, Angle) ->
     Cos = math:cos(Angle),
     Sin = math:sin(Angle),
@@ -34,21 +45,6 @@ rotate(#c2d_matrix{} = Matrix, Angle) ->
                         i13 = 0,
                         i21 = -Sin,
                         i22 = Cos,
-                        i23 = 0,
-                        i31 = 0,
-                        i32 = 0,
-                        i33 = 1
-                       }).
-
--spec rotate(#c2d_matrix{}, #vector2d{}, #vector2d{}) ->
-                    #c2d_matrix{}.
-rotate(#c2d_matrix{} = Matrix, #vector2d{} = Heading, #vector2d{} = Side) ->
-    multiply(Matrix, #c2d_matrix{
-                        i11 = Heading#vector2d.x,
-                        i12 = Heading#vector2d.y,
-                        i13 = 0,
-                        i21 = Side#vector2d.x,
-                        i22 = Side#vector2d.y,
                         i23 = 0,
                         i31 = 0,
                         i32 = 0,

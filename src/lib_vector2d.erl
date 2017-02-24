@@ -2,6 +2,8 @@
 
 %% API exports
 -export([is_zero/1,
+         is_equal/2,
+         plus/2,
          perp/1,
          normalize/1,
          length/1,
@@ -20,6 +22,18 @@
                      true | false.
 is_zero(#vector2d{x = X, y = Y}) ->
     X * X + Y * Y < ?MIN_POS_FLOAT.
+
+-spec is_equal(#vector2d{}, #vector2d{}) ->
+                      true | false.
+is_equal(#vector2d{x = X1, y = Y1}, #vector2d{x = X2, y = Y2}) ->
+    Dx = X1 - X2,
+    Dy = Y1 - Y2,
+    Dx * Dx + Dy * Dy < ?MIN_POS_FLOAT.
+
+-spec plus(#vector2d{}, #vector2d{}) ->
+                  #vector2d{}.
+plus(#vector2d{x = X1, y = Y1}, #vector2d{x = X2, y = Y2}) ->
+    #vector2d{x = X1 + X2, y = Y1 + Y2}.
 
 -spec perp(#vector2d{}) ->
                   #vector2d{}.
