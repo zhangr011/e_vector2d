@@ -45,8 +45,18 @@ length_test_() ->
     [?_assertEqual(1.4142135623730951, lib_vector2d:length(V1)),
      ?_assertEqual(2, lib_vector2d:length_sq(V1)),
      ?_assertEqual(5.0, lib_vector2d:length(V2)),
-     ?_assertEqual(25, lib_vector2d:length_sq(V2))].
-
+     ?_assertEqual(25, lib_vector2d:length_sq(V2)),
+     ?_assertEqual(1.0, lib_vector2d:length(?VECTOR_0)),
+     ?_assertEqual(1, lib_vector2d:length_sq(?VECTOR_0)),
+     ?_assert(lib_vector2d:length(?VECTOR_30) - 1 < ?MIN_POS_FLOAT),
+     ?_assert(lib_vector2d:length_sq(?VECTOR_30) - 1 < ?MIN_POS_FLOAT),
+     ?_assert(lib_vector2d:length(?VECTOR_45) - 1 < ?MIN_POS_FLOAT),
+     ?_assert(lib_vector2d:length_sq(?VECTOR_45) - 1 < ?MIN_POS_FLOAT),
+     ?_assert(lib_vector2d:length(?VECTOR_60) - 1 < ?MIN_POS_FLOAT),
+     ?_assert(lib_vector2d:length_sq(?VECTOR_60) - 1 < ?MIN_POS_FLOAT),
+     ?_assert(lib_vector2d:length(?VECTOR_90) - 1 < ?MIN_POS_FLOAT),
+     ?_assert(lib_vector2d:length_sq(?VECTOR_90) - 1 < ?MIN_POS_FLOAT)
+    ].
 
 distance_test_() ->
     V1 = #vector2d{x = 1, y = 1},
