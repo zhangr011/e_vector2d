@@ -35,7 +35,10 @@ plus_test_() ->
                       x = 0.8660254037844386 + 5 * 0.5,
                       y = 0.5 + 5 * 0.8660254037844386
                      },
-                   lib_vector2d:plus(?VECTOR_30, ?VECTOR_60, 5))
+                   lib_vector2d:plus(?VECTOR_30, ?VECTOR_60, 5)),
+     ?_assertEqual(0.8660254037844386, lib_vector2d:dot(?VECTOR_60, ?VECTOR_30)),
+     ?_assertEqual(0.9999999999999998, lib_vector2d:dot(?VECTOR_45, ?VECTOR_45)),
+     ?_assertEqual(0.4999999999999999, lib_vector2d:dot(?VECTOR_30, ?VECTOR_NEG30))
     ].
 
 normalize_test_() ->

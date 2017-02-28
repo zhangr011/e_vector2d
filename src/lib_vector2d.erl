@@ -7,6 +7,7 @@
          equal/2,
          plus/2,
          plus/3,
+         dot/2,
          multiply/2,
          perp/1,
          normalize/1,
@@ -37,7 +38,7 @@ is_zero(#vector2d{x = X, y = Y}) ->
     X * X + Y * Y < ?MIN_POS_FLOAT.
 
 -spec equal(#vector2d{}, #vector2d{}) ->
-                      true | false.
+                   true | false.
 equal(#vector2d{x = X1, y = Y1}, #vector2d{x = X2, y = Y2}) ->
     Dx = X1 - X2,
     Dy = Y1 - Y2,
@@ -52,6 +53,11 @@ plus(#vector2d{x = X1, y = Y1}, #vector2d{x = X2, y = Y2}) ->
                   #vector2d{}.
 plus(#vector2d{} = Vector, #vector2d{} = Heading, Length) ->
     plus(Vector, multiply(Heading, Length)).
+
+-spec dot(#vector2d{}, #vector2d{}) ->
+                 float().
+dot(#vector2d{x = X1, y = Y1}, #vector2d{x = X2, y = Y2}) ->
+    X1 * X2 + Y1 * Y2.
 
 -spec multiply(#vector2d{}, float()) ->
                       #vector2d{}.
