@@ -7,6 +7,7 @@
          equal/2,
          plus/2,
          plus/3,
+         neg/1,
          dot/2,
          multiply/2,
          perp/1,
@@ -53,6 +54,11 @@ plus(#vector2d{x = X1, y = Y1}, #vector2d{x = X2, y = Y2}) ->
                   #vector2d{}.
 plus(#vector2d{} = Vector, #vector2d{} = Heading, Length) ->
     plus(Vector, multiply(Heading, Length)).
+
+-spec neg(#vector2d{}) ->
+                 #vector2d{}.
+neg(#vector2d{x = X, y = Y}) ->
+    #vector2d{x = -X, y = -Y}.
 
 -spec dot(#vector2d{}, #vector2d{}) ->
                  float().
