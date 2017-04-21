@@ -11,6 +11,8 @@
 %% API
 -export([to_world_space/2,
          to_world_space/3,
+         to_local_space/2,
+         to_local_space/3,
          transform_vector2d/2]).
 
 -include("define_vector2d.hrl").
@@ -42,6 +44,23 @@ to_world_space(Local, #vector2d{} = AgentHead,
 to_world_space(#vector2d{} = Local, Angle, #vector2d{} = AgentPoint) ->
     to_world_space(Local, lib_vector2d:vector2d(Angle), AgentPoint).
 
+-spec to_local_space(World :: #vector2d{} | list(),
+                     AgentHead :: #vector2d{}) ->
+                            #vector2d{} | list().
+to_local_space(World, #vector2d{} = AgentHead) ->
+    AgentSide = lib_vector2d:perp(AgentHead),
+    inner_to_local_space(World, AgentHead, AgentSide, 0, 0).
+
+-spec to_local_space(World :: #vector2d{} | list(),
+                     AgentHead :: #vector2d{},
+                     AgentPoint :: #vector2d{}) ->
+                            #vector2d{} | list().
+to_local_space(World, #vector2d{} = AgentHead, #vector2d{} = AgentPoint) ->
+    AgentSide = lib_vector2d:perp(AgentHead),
+    Tx = -lib_vector2d:dot(AgentPoint, AgentHead),
+    Ty = -lib_vector2d:dot(AgentPoint, AgentSide),
+    inner_to_local_space(World, AgentHead, AgentSide, Tx, Ty).
+
 -spec transform_vector2d(#c2d_matrix{}, #vector2d{} | list()) ->
                                 #vector2d{} | list().
 transform_vector2d(#c2d_matrix{} = Matrix, #vector2d{} = Point) ->
@@ -56,7 +75,6 @@ transform_vector2d(#c2d_matrix{} = Matrix, List) ->
                       transform_vector2d(Matrix, Point)
               end, List).
 
-
 %%--------------------------------------------------------------------
 %% @doc
 %% @spec
@@ -66,3 +84,13 @@ transform_vector2d(#c2d_matrix{} = Matrix, List) ->
 %%%===================================================================
 %%% Internal functions
 %%%===================================================================
+
+inner_to_local_space(World, AgentHead, AgentSide, Tx, Ty) ->
+    transform_vector2d(#c2d_matrix{
+                          i11 = AgentHead#vector2d.x,
+                          i12 = AgentSide#vector2d.x,
+                          i21 = AgentHead#vector2d.y,
+                          i22 = AgentSide#vector2d.y,
+                          i31 = Tx,
+                          i32 = Ty
+                         }, World).
